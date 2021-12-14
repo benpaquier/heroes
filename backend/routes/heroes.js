@@ -113,7 +113,7 @@ app.put('/:slug', successIfExists, validateHero, (req, res) => {
     // une clé du hero de base va mettre a jour la valeur
     // de la clé du hero de base
     ...req.body,
-    slug: req.body.name.toLowerCase().replace(/[^\w]/gi, '-')
+    slug: req.body.name ? req.body.name.toLowerCase().replace(/[^\w]/gi, '-') : hero.slug
   }
 
   // req.body

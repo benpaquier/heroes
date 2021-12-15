@@ -61,6 +61,8 @@ app.get('/:slug/powers', successIfExists, (req, res) => {
 })
 
 app.post('/', failIfExists, validateHero, (req, res) => {
+  console.log(req.body)
+
   const hero = {
     slug: req.body.name.toLowerCase().replace(/[^\w]/gi, '-'),
     ...req.body
@@ -103,17 +105,16 @@ app.delete('/:slug/power/:power', successIfExists, (req, res) => {
 app.put('/:slug', successIfExists, validateHero, (req, res) => {
   const { slug } = req.params
   const index = heroes.findIndex(hero => hero.slug === slug)
-  let hero = heroes[index]
 
-  hero = {
+  heroes[index] = {
     // hero de base
-    ...hero,
+    ...heroes[index],
 
     // chaque clés de req.body dont le nom correspond a
     // une clé du hero de base va mettre a jour la valeur
     // de la clé du hero de base
     ...req.body,
-    slug: req.body.name ? req.body.name.toLowerCase().replace(/[^\w]/gi, '-') : hero.slug
+    slug: req.body.name ? req.body.name.toLowerCase().replace(/[^\w]/gi, '-') : heroes[index].slug
   }
 
   // req.body
@@ -135,7 +136,7 @@ app.put('/:slug', successIfExists, validateHero, (req, res) => {
   
   // }
 
-  res.json(hero)
+  res.json(heroes[index])
 })
 
 module.exports = app
